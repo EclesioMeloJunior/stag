@@ -17,30 +17,97 @@ import (
 // 4. Garantir que o teste, que antes falhou, agora passe.
 
 func TestNextToken(t *testing.T) {
-	//input := "=+-*^/√{}(),;"
-	input := "=+"
+	t.Run("test_eof_token", func(t *testing.T) {
+		input := ""
+		l := lexer.New(input)
 
-	tests := []struct {
-		expected *primitives.Token
-	}{
-		{
-			expected: &primitives.Token{
-				Kind:    primitives.Equals,
-				Literal: "=",
-			},
-		},
-		{
-			expected: &primitives.Token{
-				Kind:    primitives.Plus,
-				Literal: "+",
-			},
-		},
-	}
-
-	l := lexer.New(input)
-
-	for _, tt := range tests {
 		tok := l.NextToken()
-		require.Equal(t, tt.expected, tok)
-	}
+		expected := &primitives.Token{
+			Kind: primitives.EOF,
+		}
+		require.Equal(t, expected, tok)
+
+		// if I call next token twice or more
+		// in a already ended text input
+		// it should return me EOF always
+		tok = l.NextToken()
+		require.Equal(t, expected, tok)
+	})
+
+	t.Run("test_more_tokens", func(t *testing.T) {
+		//input := "=+-*^/√{}(),;"
+		input := "=+ abc   let x = 5 + 5;"
+
+		tests := []struct {
+			expected *primitives.Token
+		}{
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Equals,
+					Literal: "=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Plus,
+					Literal: "+",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Ident,
+					Literal: "abc",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Keyword,
+					Literal: "let",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Ident,
+					Literal: "x",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Equals,
+					Literal: "=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Number,
+					Literal: "5",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Plus,
+					Literal: "+",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Number,
+					Literal: "5",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Semicolon,
+					Literal: ";",
+				},
+			},
+		}
+
+		l := lexer.New(input)
+
+		for _, tt := range tests {
+			tok := l.NextToken()
+			require.Equal(t, tt.expected, tok, "%s != %s", tt.expected.String(), tok.String())
+		}
+	})
 }
