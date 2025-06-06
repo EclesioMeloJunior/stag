@@ -26,6 +26,18 @@ func (tk TokenKind) String() string {
 		return "Carrot"
 	case Less:
 		return "Less"
+	case Greater:
+		return "Greater"
+	case Bang:
+		return "Bang"
+	case NotEqual:
+		return "NotEqual"
+	case Equal:
+		return "Equal"
+	case LessOrEqual:
+		return "LessOrEqual"
+	case GreaterOrEqual:
+		return "GreaterOrEqual"
 	case OpenBrackets:
 		return "OpenBrackets"
 	case CloseBrackets:

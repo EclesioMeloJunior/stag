@@ -36,7 +36,7 @@ func TestNextToken(t *testing.T) {
 
 	t.Run("test_more_tokens", func(t *testing.T) {
 		//input := "=+-*^/√{}(),;"
-		input := "=+ abc   let x = 5 + 5; [] {} () - * / ^ ,"
+		input := "=+ abc   let x = 5 + 5; [] {} () - * / ^ , < > ! != == <= >="
 
 		tests := []struct {
 			expected *primitives.Token
@@ -166,6 +166,48 @@ func TestNextToken(t *testing.T) {
 				expected: &primitives.Token{
 					Kind:    primitives.Comma,
 					Literal: ",",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Less,
+					Literal: "<",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Greater,
+					Literal: ">",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Bang,
+					Literal: "!",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.NotEqual,
+					Literal: "!=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Equal,
+					Literal: "==",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.LessOrEqual,
+					Literal: "<=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.GreaterOrEqual,
+					Literal: ">=",
 				},
 			},
 		}
