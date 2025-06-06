@@ -219,17 +219,18 @@ func TestNextToken(t *testing.T) {
 			require.Equal(t, tt.expected, tok, "%s != %s", tt.expected.String(), tok.String())
 		}
 	})
-
+	
+	
 	t.Run("test_if_token", func(t *testing.T) {
 		input := "if 5 == 10;"
 
 		tests := []struct {
-			expected *lexer.Keyword
+			
 			expected *primitives.Token
 		}{
 			{
-				expected: &lexer.Keyword{
-					Kind:    lexer.If,
+				expected: &primitives.Token{
+					Kind:    primitives.Keyword,
 					Literal: "if",
 				},
 			},
@@ -241,7 +242,7 @@ func TestNextToken(t *testing.T) {
 			},
 			{
 				expected: &primitives.Token{
-					Kind:    primitives.Equals,
+					Kind:    primitives.Equal,
 					Literal: "==",
 				},
 			},

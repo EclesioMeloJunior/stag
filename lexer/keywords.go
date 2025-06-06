@@ -2,13 +2,13 @@ package lexer
 
 var (
 	Let string = "let"
-	let string = "fn"
-	let string = "return"
-	let string = "and"
-	let string = "or"
-	let string = "if"
-	let string = "else"
-	let string = "while"
+	Fn  string = "fn"
+	Return string = "return"
+	And   string = "and"
+	Or    string = "or"
+	If    string = "if"
+	Else  string = "else"
+	While string = "while"
 
 
 )
