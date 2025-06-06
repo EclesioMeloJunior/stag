@@ -12,7 +12,7 @@ func (tk TokenKind) String() string {
 		return "Ident"
 	case Number:
 		return "Number"
-	case Equals:
+	case Assign:
 		return "Equals"
 	case Plus:
 		return "Plus"
@@ -24,8 +24,8 @@ func (tk TokenKind) String() string {
 		return "Slash"
 	case Carrot:
 		return "Carrot"
-	case Sqrt:
-		return "Sqrt"
+	case Less:
+		return "Less"
 	case OpenBrackets:
 		return "OpenBrackets"
 	case CloseBrackets:
@@ -52,19 +52,29 @@ const (
 	Ident
 	Number
 
-	Equals // =
-	Plus   // +
-	Minus  // -
-	Star   // *
-	Slash  // /
-	Carrot // ^
-	Sqrt   // √
+	Assign  // =
+	Plus    // +
+	Minus   // -
+	Star    // *
+	Slash   // /
+	Carrot  // ^
+	Less    // <
+	Greater // >
+	Bang 	// !
 
-	OpenBrackets  // {
-	CloseBrackets // }
+	NotEqual 	   // !=
+	Equal 		   // ==
+	LessOrEqual    // <=
+	GreaterOrEqual // >=
+
+	OpenCurlyBrace  // {
+	CloseCurlyBrace // }
 
 	OpenParen  // (
 	CloseParen // )
+
+	OpenBrackets  // [
+	CloseBrackets // ]
 
 	Comma     // ,
 	Semicolon // ;
