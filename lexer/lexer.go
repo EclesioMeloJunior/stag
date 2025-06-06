@@ -24,13 +24,117 @@ func (l *Lexer) NextToken() *primitives.Token {
 
 	switch l.currentChar {
 	case '=':
-		tok = &primitives.Token{
-			Kind:    primitives.Equals,
-			Literal: string(l.currentChar),
+		if l.input[l.nextPos] == '=' {
+			l.readChar()
+			tok = &primitives.Token{
+				Kind:    primitives.Equal,
+				Literal: "==",
+			}
+		} else {
+			tok = &primitives.Token{
+				Kind:    primitives.Assign,
+				Literal: string(l.currentChar),
+			}
 		}
+	case '<':
+		if l.input[l.nextPos] == '=' {
+			l.readChar()
+			tok = &primitives.Token{
+				Kind:    primitives.LessOrEqual,
+				Literal: "<=",
+			}
+		} else {
+			tok = &primitives.Token{
+				Kind:    primitives.Less,
+				Literal: string(l.currentChar),
+			}
+		}
+	case '>':
+		if l.input[l.nextPos] == '=' {
+			l.readChar()
+			tok = &primitives.Token{
+				Kind:    primitives.GreaterOrEqual,
+				Literal: ">=",
+			}
+		} else {
+			tok = &primitives.Token{
+				Kind:    primitives.Greater,
+				Literal: string(l.currentChar),
+			}
+		}
+
+	case '!':
+		if l.input[l.nextPos] == '=' {
+			l.readChar()
+			tok = &primitives.Token{
+				Kind:    primitives.NotEqual,
+				Literal: "!=",
+			}
+		} else {
+			tok = &primitives.Token{
+				Kind:    primitives.Bang,
+				Literal: string(l.currentChar),
+			}
+		}
+
 	case '+':
 		tok = &primitives.Token{
 			Kind:    primitives.Plus,
+			Literal: string(l.currentChar),
+		}
+	case '-':
+		tok = &primitives.Token{
+			Kind:    primitives.Minus,
+			Literal: string(l.currentChar),
+		}
+	case '*':
+		tok = &primitives.Token{
+			Kind:    primitives.Star,
+			Literal: string(l.currentChar),
+		}
+	case '/':
+		tok = &primitives.Token{
+			Kind:    primitives.Slash,
+			Literal: string(l.currentChar),
+		}
+	case '^':
+		tok = &primitives.Token{
+			Kind:    primitives.Carrot,
+			Literal: string(l.currentChar),
+		}
+	case '{':
+		tok = &primitives.Token{
+			Kind:    primitives.OpenCurlyBrace,
+			Literal: string(l.currentChar),
+		}
+	case '}':
+		tok = &primitives.Token{
+			Kind:    primitives.CloseCurlyBrace,
+			Literal: string(l.currentChar),
+		}
+	case '(':
+		tok = &primitives.Token{
+			Kind:    primitives.OpenParen,
+			Literal: string(l.currentChar),
+		}
+	case ')':
+		tok = &primitives.Token{
+			Kind:    primitives.CloseParen,
+			Literal: string(l.currentChar),
+		}
+	case '[':
+		tok = &primitives.Token{
+			Kind:    primitives.OpenBrackets,
+			Literal: string(l.currentChar),
+		}
+	case ']':
+		tok = &primitives.Token{
+			Kind:    primitives.CloseBrackets,
+			Literal: string(l.currentChar),
+		}
+	case ',':
+		tok = &primitives.Token{
+			Kind:    primitives.Comma,
 			Literal: string(l.currentChar),
 		}
 	case ';':
@@ -42,6 +146,7 @@ func (l *Lexer) NextToken() *primitives.Token {
 		tok = &primitives.Token{
 			Kind: primitives.EOF,
 		}
+
 	default:
 		if isLetter(l.currentChar) {
 			return l.readIdentifierOrKeyword()

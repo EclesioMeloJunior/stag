@@ -36,14 +36,14 @@ func TestNextToken(t *testing.T) {
 
 	t.Run("test_more_tokens", func(t *testing.T) {
 		//input := "=+-*^/√{}(),;"
-		input := "=+ abc   let x = 5 + 5;"
+		input := "=+ abc   let x = 5 + 5; [] {} () - * / ^ , < > ! != == <= >="
 
 		tests := []struct {
 			expected *primitives.Token
 		}{
 			{
 				expected: &primitives.Token{
-					Kind:    primitives.Equals,
+					Kind:    primitives.Assign,
 					Literal: "=",
 				},
 			},
@@ -73,7 +73,7 @@ func TestNextToken(t *testing.T) {
 			},
 			{
 				expected: &primitives.Token{
-					Kind:    primitives.Equals,
+					Kind:    primitives.Assign,
 					Literal: "=",
 				},
 			},
@@ -99,6 +99,115 @@ func TestNextToken(t *testing.T) {
 				expected: &primitives.Token{
 					Kind:    primitives.Semicolon,
 					Literal: ";",
+				},
+			},
+
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.OpenBrackets,
+					Literal: "[",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.CloseBrackets,
+					Literal: "]",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.OpenCurlyBrace,
+					Literal: "{",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.CloseCurlyBrace,
+					Literal: "}",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.OpenParen,
+					Literal: "(",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.CloseParen,
+					Literal: ")",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Minus,
+					Literal: "-",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Star,
+					Literal: "*",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Slash,
+					Literal: "/",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Carrot,
+					Literal: "^",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Comma,
+					Literal: ",",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Less,
+					Literal: "<",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Greater,
+					Literal: ">",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Bang,
+					Literal: "!",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.NotEqual,
+					Literal: "!=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.Equal,
+					Literal: "==",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.LessOrEqual,
+					Literal: "<=",
+				},
+			},
+			{
+				expected: &primitives.Token{
+					Kind:    primitives.GreaterOrEqual,
+					Literal: ">=",
 				},
 			},
 		}
