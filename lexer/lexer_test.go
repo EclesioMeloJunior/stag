@@ -358,7 +358,7 @@ func TestNextToken(t *testing.T) {
 				expected: &primitives.Token{
 					Kind: primitives.Semicolon,
 					Literal: ";",
-				},
+				}, 
 			},
 			{
 				expected: &primitives.Token{
