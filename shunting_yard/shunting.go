@@ -31,7 +31,7 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 	for _, token := range tokens {
 		switch token.Kind {
 		// case primitives.Ident:
-		// 	outputQueue = append(outputQueue, token)
+		// outputQueue = append(outputQueue, token)
 
 		case primitives.Number:
 			n, err := strconv.Atoi(token.Literal)
@@ -40,18 +40,35 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 			}
 			outputQueue = append(outputQueue, Number{Value: int64(n)})
 		
-		/*case primitives.OpenParen:
+		case primitives.OpenParen:
 			operatorStack = append(operatorStack, token)
 
 		case primitives.CloseParen:
 			for len(operatorStack) > 0 && operatorStack[len(operatorStack)-1].Kind != primitives.OpenParen {
-				outputQueue = append(outputQueue, operatorStack[len(operatorStack)-1])
+				top := operatorStack[len(operatorStack)-1]
 				operatorStack = operatorStack[:len(operatorStack)-1]
+
+				rhs := outputQueue[len(outputQueue)-1]
+				lhs := outputQueue[len(outputQueue)-2]
+				outputQueue = outputQueue[:len(outputQueue) -2]
+
+				switch top.Literal {
+				case "+":
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add} )
+				case "-":
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub} )
+				case "*":
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul} )
+				case "/": 
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div} )
+				}
 			}
+
 			if len(operatorStack) == 0 {
 				panic("Parêntese desbalanceado")
 			}
-			operatorStack = operatorStack[:len(operatorStack)-1]*/
+
+			operatorStack = operatorStack[:len(operatorStack)-1]
 
 		default:
 			if isOperator(token.Kind) {

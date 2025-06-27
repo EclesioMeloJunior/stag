@@ -47,8 +47,10 @@ type Conditional struct {
 	truePath []Statement
 	elsePath []Statement
 }
-func (Conditional) isStatement() {}
 
+
+//criar uma nova branch para essas funções
+func (Conditional) isStatement() {}
 
 type Loop struct {}
 func (Loop) isStatement() {}

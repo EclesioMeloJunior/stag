@@ -52,7 +52,7 @@ func TestPrecendence(t *testing.T) {
 }
 
 func TestOpenCloseParen(t *testing.T) {
-	input := "(3 + 4) * 2"
+	input := "(3 + 4 * 2) * 2"
 	l := lexer.New(input)
 
 	var tokens []*primitives.Token
@@ -67,8 +67,7 @@ func TestOpenCloseParen(t *testing.T) {
 	rpn := ShuntingYard(tokens)
 
 	expected := []Statement{
-		BinaryOperation{op: add, lhs: Number{Value: 3},
-		rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2}}},
+		BinaryOperation{op: mul, lhs: BinaryOperation{op: add, lhs: Number{Value: 3}, rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2} } }, rhs: Number{Value: 2} },
 	}
 	require.Equal(t, expected, rpn)
 }
