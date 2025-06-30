@@ -47,16 +47,23 @@ type Conditional struct {
 	truePath []Statement
 	elsePath []Statement
 }
-
-
-//criar uma nova branch para essas funções
 func (Conditional) isStatement() {}
 
-type Loop struct {}
+type Loop struct {
+	Conditional Expression
+	body 		[]Statement
+}
 func (Loop) isStatement() {}
 
-type FuncDeclaration struct{}
+type FuncDeclaration struct{
+	name 		string
+	parameters	[]string
+	body		[]Statement		
+}
 func (FuncDeclaration) isStatement() {}
 
-type FuncCall struct{}
+type FuncCall struct{
+	name 		string
+	arguments	[]Expression
+}
 func (FuncCall) isExpression() {}
