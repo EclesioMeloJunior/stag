@@ -48,6 +48,7 @@ func TestPrecendence(t *testing.T) {
 		BinaryOperation{op: add, lhs: Number{Value: 3},
 		rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2}}},
 	}
+	
 	require.Equal(t, expected, rpn)
 }
 
