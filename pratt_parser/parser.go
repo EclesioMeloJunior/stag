@@ -1,6 +1,7 @@
 package pratt_parser
 
 import (
+	"fmt"
 	"stag/lexer"
 	"stag/pratt_parser/ast"
 	"stag/primitives"
@@ -9,14 +10,28 @@ import (
 type Parser struct {
 	l            *lexer.Lexer
 	currentToken *primitives.Token
+	errors []string
 	peekToken    *primitives.Token
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l}
+	p := &Parser{
+		l: l,
+		errors: []string{},
+	}
 	p.nextToken()
 	p.nextToken()
 	return p
+}
+
+func (p *Parser) Errors() []string{
+	return p.errors
+}
+
+func (p *Parser) peekError(t primitives.TokenKind) {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Kind)
+	p.errors = append(p.errors, msg)
+
 }
 
 func (p *Parser) nextToken() {
@@ -49,7 +64,9 @@ func (p *Parser) parseStatement() ast.Statement {
 		if p.currentToken.Literal == "let"{
 			return p.parseLetStatement()
 		}
-		
+		if p.currentToken.Literal == "return"{
+			return p.parseReturnStatement()
+		}
 	default:
 		return nil
 	}
@@ -75,6 +92,17 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	return stmt
 }
 
+func (p *Parser) parseReturnStatement() *ast.ReturnStatement{
+	stmt:= &ast.ReturnStatement{Token: *p.currentToken}
+
+	p.nextToken()
+	for !p.currentTokenIs(primitives.Semicolon){
+		p.nextToken()
+	}
+
+	return stmt
+}
+
 func (p *Parser) currentTokenIs(t primitives.TokenKind) bool {
 	return p.currentToken.Kind == t
 }
@@ -88,6 +116,7 @@ func (p *Parser) expectPeek(t primitives.TokenKind) bool {
 		p.nextToken()
 		return true
 	} else {
+		p.peekError(t)
 		return false
 	}
 }
