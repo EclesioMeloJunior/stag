@@ -61,7 +61,7 @@ func TestOpenCloseParen(t *testing.T) {
 		tok := l.NextToken()
 		if tok.Kind == primitives.EOF {
 			break
-		}
+		}	
 		tokens = append(tokens, tok)
 	}
 
@@ -73,3 +73,24 @@ func TestOpenCloseParen(t *testing.T) {
 	require.Equal(t, expected, rpn)
 }
 
+
+func TestExtractTokensBetween(t *testing.T) {
+	tokens := []*primitives.Token{
+		{Literal: "if"},
+		{Literal: "("},
+		{Literal: "x"},
+		{Literal: ">"},
+		{Literal: "5"},
+		{Literal: ")"},
+		{Literal: "{"},
+		{Literal: "x"},
+		{Literal: "="},
+		{Literal: "1"},
+		{Literal: "}"},
+	}
+	cond := extractTokensBetween(tokens, "(", ")")
+	require.Len(t, cond, 3)
+	require.Equal(t, "x", cond[0].Literal)
+	require.Equal(t, ">", cond[1].Literal)
+	require.Equal(t, "5", cond[2].Literal)
+}

@@ -124,3 +124,62 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 
 	return outputQueue
 }
+
+func extractTokensBetween(tokens []*primitives.Token, open string, close string) []*primitives.Token {
+	depth := 0
+	start := -1
+	for i, token := range tokens {
+		if token.Literal == open {
+			if depth == 0 {
+				start = i + 1
+			}
+			depth++
+		} else if token.Literal == close {
+			depth--
+			if depth == 0 {
+				return tokens[start:i]
+			}
+		}
+	}
+	return nil
+}
+
+func hasElse(tokens []*primitives.Token) bool {
+	for i, token := range tokens {
+		if token.Literal == "else" {
+			return true
+		}
+		// Assume que '}' fecha o bloco e depois disso pode vir o else
+		if token.Literal == "}" && i+1 < len(tokens) && tokens[i+1].Literal == "else" {
+			return true
+		}
+	}
+	return false
+}
+
+func extractTokensAfterElse(tokens []*primitives.Token) []*primitives.Token {
+	for i, token := range tokens {
+		if token.Literal == "else" && i+1 < len(tokens) && tokens[i+1].Literal == "{" {
+			return extractTokensBetween(tokens[i:], "{", "}")
+		}
+	}
+	return nil
+}
+
+func splitByComma(tokens []*primitives.Token) [][]*primitives.Token {
+	var args [][]*primitives.Token
+	start := 0
+	depth := 0
+	for i, tok := range tokens {
+		if tok.Literal == "(" {
+			depth++
+		} else if tok.Literal == ")" {
+			depth--
+		} else if tok.Literal == "," && depth == 0 {
+			args = append(args, tokens[start:i])
+			start = i + 1
+		}
+	}
+	args = append(args, tokens[start:])
+	return args
+}
