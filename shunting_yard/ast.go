@@ -9,54 +9,60 @@ const (
 	div
 )
 
-type Statement interface { 
+type Statement interface {
 	isStatement()
 }
 
-type Expression interface { 
+type Expression interface {
 	isExpression()
 }
 
-type Ident struct { 
+type Ident struct {
 	varNome string
 }
-func(Ident) isExpression(){}
+
+func (Ident) isExpression() {}
 
 type Number struct {
 	Value int64
-} 
-func(Number) isExpression(){}
-func(Number) isStatement(){}
+}
 
-type BinaryOperation struct { 
-	op operator
+func (Number) isExpression() {}
+func (Number) isStatement()  {}
+
+type BinaryOperation struct {
+	op  operator
 	lhs Expression
 	rhs Expression
 }
-func (BinaryOperation) isExpression(){}
-func (BinaryOperation) isStatement(){}
+
+func (BinaryOperation) isExpression() {}
+func (BinaryOperation) isStatement()  {}
 
 type VarAssing struct {
-	v string
+	v     string
 	value Expression
 }
+
 func (VarAssing) isStatement() {}
 
-type Conditional struct { 
+type Conditional struct {
 	condition Expression
-	truePath []Statement
-	elsePath []Statement
+	truePath  []Statement
+	elsePath  []Statement
 }
 
-
-//criar uma nova branch para essas funções
+// criar uma nova branch para essas funções
 func (Conditional) isStatement() {}
 
-type Loop struct {}
+type Loop struct{}
+
 func (Loop) isStatement() {}
 
 type FuncDeclaration struct{}
+
 func (FuncDeclaration) isStatement() {}
 
 type FuncCall struct{}
+
 func (FuncCall) isExpression() {}

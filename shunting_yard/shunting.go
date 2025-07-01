@@ -16,7 +16,7 @@ var precedencia = map[primitives.TokenKind]int{
 	primitives.Minus:          3,
 	primitives.Star:           4,
 	primitives.Slash:          4,
-	primitives.Carrot:         5, 
+	primitives.Carrot:         5,
 }
 
 func isOperator(kind primitives.TokenKind) bool {
@@ -39,7 +39,7 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 				panic(err)
 			}
 			outputQueue = append(outputQueue, Number{Value: int64(n)})
-		
+
 		case primitives.OpenParen:
 			operatorStack = append(operatorStack, token)
 
@@ -50,17 +50,17 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 
 				rhs := outputQueue[len(outputQueue)-1]
 				lhs := outputQueue[len(outputQueue)-2]
-				outputQueue = outputQueue[:len(outputQueue) -2]
+				outputQueue = outputQueue[:len(outputQueue)-2]
 
 				switch top.Literal {
 				case "+":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add} )
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
 				case "-":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub} )
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
 				case "*":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul} )
-				case "/": 
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div} )
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+				case "/":
+					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
 				}
 			}
 
@@ -77,20 +77,20 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 					if isOperator(top.Kind) && precedencia[top.Kind] >= precedencia[token.Kind] {
 						rhs := outputQueue[len(outputQueue)-1]
 						lhs := outputQueue[len(outputQueue)-2]
-						outputQueue = outputQueue[:len(outputQueue) -2]
+						outputQueue = outputQueue[:len(outputQueue)-2]
 						switch top.Literal {
 						case "+":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add} )
+							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
 						case "-":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub} )
+							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
 						case "*":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul} )
-						case "/": 
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div} )
+							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+						case "/":
+							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
 						}
-						
+
 						operatorStack = operatorStack[:len(operatorStack)-1]
-		
+
 					} else {
 						break
 					}
@@ -107,17 +107,17 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 		}
 		rhs := outputQueue[len(outputQueue)-1]
 		lhs := outputQueue[len(outputQueue)-2]
-		outputQueue = outputQueue[:len(outputQueue) -2]
-	
+		outputQueue = outputQueue[:len(outputQueue)-2]
+
 		switch op.Literal {
 		case "+":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add} )
+			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
 		case "-":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub} )
+			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
 		case "*":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul} )
-		case "/": 
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div} )
+			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+		case "/":
+			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
 		}
 		operatorStack = operatorStack[:len(operatorStack)-1]
 	}

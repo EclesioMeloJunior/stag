@@ -72,10 +72,10 @@ const (
 	Carrot  // ^
 	Less    // <
 	Greater // >
-	Bang 	// !
+	Bang    // !
 
-	NotEqual 	   // !=
-	Equal 		   // ==
+	NotEqual       // !=
+	Equal          // ==
 	LessOrEqual    // <=
 	GreaterOrEqual // >=
 

@@ -46,7 +46,7 @@ func TestPrecendence(t *testing.T) {
 
 	expected := []Statement{
 		BinaryOperation{op: add, lhs: Number{Value: 3},
-		rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2}}},
+			rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2}}},
 	}
 	require.Equal(t, expected, rpn)
 }
@@ -67,8 +67,7 @@ func TestOpenCloseParen(t *testing.T) {
 	rpn := ShuntingYard(tokens)
 
 	expected := []Statement{
-		BinaryOperation{op: mul, lhs: BinaryOperation{op: add, lhs: Number{Value: 3}, rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2} } }, rhs: Number{Value: 2} },
+		BinaryOperation{op: mul, lhs: BinaryOperation{op: add, lhs: Number{Value: 3}, rhs: BinaryOperation{op: mul, lhs: Number{Value: 4}, rhs: Number{Value: 2}}}, rhs: Number{Value: 2}},
 	}
 	require.Equal(t, expected, rpn)
 }
-

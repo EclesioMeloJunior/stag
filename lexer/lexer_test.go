@@ -219,13 +219,11 @@ func TestNextToken(t *testing.T) {
 			require.Equal(t, tt.expected, tok, "%s != %s", tt.expected.String(), tok.String())
 		}
 	})
-	
-	
+
 	t.Run("test_if_token", func(t *testing.T) {
 		input := "fn; return while let x = 5; if 5 > 1 and x < 10 or x == 10; else"
 
 		tests := []struct {
-			
 			expected *primitives.Token
 		}{
 			{
@@ -266,103 +264,103 @@ func TestNextToken(t *testing.T) {
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Assign,
+					Kind:    primitives.Assign,
 					Literal: "=",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Number,
+					Kind:    primitives.Number,
 					Literal: "5",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Semicolon,
+					Kind:    primitives.Semicolon,
 					Literal: ";",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Keyword,
+					Kind:    primitives.Keyword,
 					Literal: "if",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Number,
+					Kind:    primitives.Number,
 					Literal: "5",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Greater,
+					Kind:    primitives.Greater,
 					Literal: ">",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Number,
+					Kind:    primitives.Number,
 					Literal: "1",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Keyword,
+					Kind:    primitives.Keyword,
 					Literal: "and",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Ident,
+					Kind:    primitives.Ident,
 					Literal: "x",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Less,
+					Kind:    primitives.Less,
 					Literal: "<",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Number,
+					Kind:    primitives.Number,
 					Literal: "10",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Keyword,
+					Kind:    primitives.Keyword,
 					Literal: "or",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Ident,
+					Kind:    primitives.Ident,
 					Literal: "x",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Equal,
+					Kind:    primitives.Equal,
 					Literal: "==",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Number,
+					Kind:    primitives.Number,
 					Literal: "10",
 				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Semicolon,
+					Kind:    primitives.Semicolon,
 					Literal: ";",
-				}, 
+				},
 			},
 			{
 				expected: &primitives.Token{
-					Kind: primitives.Keyword,
+					Kind:    primitives.Keyword,
 					Literal: "else",
 				},
 			},
