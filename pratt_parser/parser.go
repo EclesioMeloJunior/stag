@@ -2,29 +2,53 @@ package pratt_parser
 
 import (
 	"fmt"
+	"go/token"
 	"stag/lexer"
 	"stag/pratt_parser/ast"
 	"stag/primitives"
 )
 
+const(
+	_ int = iota
+	LOWEST    		// 	-
+	EQUALS 			//	==
+	LESSGREATER		// 	> or <
+	PLUS 			//	+
+	STAR			// 	*
+	PREFIX			//	-X or !X
+	CALL			// myFunction(X)
+)
+
 type Parser struct {
 	l            *lexer.Lexer
+	errors       []string
 	currentToken *primitives.Token
-	errors []string
 	peekToken    *primitives.Token
+
+	prefixParseFns map[primitives.TokenKind]prefixParseFn
+	infixParseFns  map[primitives.TokenKind]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
-		l: l,
+		l:      l,
 		errors: []string{},
 	}
+
+	p.prefixParseFns= make(map[primitives.TokenKind]prefixParseFn)
+	p.registerPrefix(primitives.Ident, p.parseIdentifier)
+
 	p.nextToken()
 	p.nextToken()
 	return p
 }
 
-func (p *Parser) Errors() []string{
+func(p *Parser) parseIdentifier() ast.Expression{
+	return &ast.Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
+}
+
+
+func (p *Parser) Errors() []string {
 	return p.errors
 }
 
@@ -43,7 +67,6 @@ func (p *Parser) ParserProgram() *ast.Program {
 	return nil
 }
 
-
 func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
@@ -58,21 +81,21 @@ func (p *Parser) ParseProgram() *ast.Program {
 }
 
 
+
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.currentToken.Kind {
 	case primitives.Keyword:
-		if p.currentToken.Literal == "let"{
+		if p.currentToken.Literal == "let" {
 			return p.parseLetStatement()
 		}
-		if p.currentToken.Literal == "return"{
+		if p.currentToken.Literal == "return" {
 			return p.parseReturnStatement()
 		}
 	default:
-		return nil
+		return p.parseExpressionStatement()
 	}
 	return nil
 }
-
 
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.currentToken}
@@ -85,22 +108,42 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	if !p.expectPeek(primitives.Assign) {
 		return nil
 	}
-	
+
 	for !p.currentTokenIs(primitives.Semicolon) {
 		p.nextToken()
 	}
 	return stmt
 }
 
-func (p *Parser) parseReturnStatement() *ast.ReturnStatement{
-	stmt:= &ast.ReturnStatement{Token: *p.currentToken}
+func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
+	stmt := &ast.ReturnStatement{Token: *p.currentToken}
 
 	p.nextToken()
-	for !p.currentTokenIs(primitives.Semicolon){
+	for !p.currentTokenIs(primitives.Semicolon) {
 		p.nextToken()
 	}
 
 	return stmt
+}
+
+
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	stmt:= &ast.ExpressionStatement{Token: *p.currentToken}
+
+	stmt.Expression = p.parseExpression(LOWEST)
+	if p.peekTokenIs(primitives.TokenKind(token.SEMICOLON)){
+		p.nextToken()
+	}
+	return stmt
+}
+func (p *Parser) parseExpression(precedence int) ast.Expression{
+	prefix:= p.prefixParseFns[p.currentToken.Kind]
+	if prefix == nil {
+		return nil
+	}
+	leftExp:= prefix()
+
+	return leftExp
 }
 
 func (p *Parser) currentTokenIs(t primitives.TokenKind) bool {
@@ -121,3 +164,14 @@ func (p *Parser) expectPeek(t primitives.TokenKind) bool {
 	}
 }
 
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
+func (p *Parser) registerPrefix(tokenType primitives.TokenKind, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+func (p *Parser) registerInfix(tokenType primitives.TokenKind, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
+}
