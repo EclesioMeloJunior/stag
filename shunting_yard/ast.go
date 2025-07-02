@@ -1,12 +1,12 @@
 package shunting_yard
 
-type operator byte
+type Operation byte
 
 const (
-	add operator = iota
-	sub
-	mul
-	div
+	Add Operation = iota
+	Sub
+	Mul
+	Div
 )
 
 type Statement interface {
@@ -27,17 +27,17 @@ type Number struct {
 	Value int64
 }
 
-func (Number) isExpression() {}
-func (Number) isStatement()  {}
+func (*Number) isExpression() {}
+func (*Number) isStatement()  {}
 
 type BinaryOperation struct {
-	op  operator
-	lhs Expression
-	rhs Expression
+	Op  Operation
+	Lhs Expression
+	Rhs Expression
 }
 
-func (BinaryOperation) isExpression() {}
-func (BinaryOperation) isStatement()  {}
+func (*BinaryOperation) isExpression() {}
+func (*BinaryOperation) isStatement()  {}
 
 type VarAssing struct {
 	v     string

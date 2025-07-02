@@ -38,7 +38,7 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 			if err != nil {
 				panic(err)
 			}
-			outputQueue = append(outputQueue, Number{Value: int64(n)})
+			outputQueue = append(outputQueue, &Number{Value: int64(n)})
 
 		case primitives.OpenParen:
 			operatorStack = append(operatorStack, token)
@@ -54,13 +54,13 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 
 				switch top.Literal {
 				case "+":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
+					outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Add})
 				case "-":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
+					outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Sub})
 				case "*":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+					outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Mul})
 				case "/":
-					outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
+					outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Div})
 				}
 			}
 
@@ -80,13 +80,13 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 						outputQueue = outputQueue[:len(outputQueue)-2]
 						switch top.Literal {
 						case "+":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
+							outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Add})
 						case "-":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
+							outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Sub})
 						case "*":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+							outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Mul})
 						case "/":
-							outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
+							outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Div})
 						}
 
 						operatorStack = operatorStack[:len(operatorStack)-1]
@@ -111,13 +111,13 @@ func ShuntingYard(tokens []*primitives.Token) []Statement {
 
 		switch op.Literal {
 		case "+":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: add})
+			outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Add})
 		case "-":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: sub})
+			outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Sub})
 		case "*":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: mul})
+			outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Mul})
 		case "/":
-			outputQueue = append(outputQueue, BinaryOperation{rhs: rhs.(Expression), lhs: lhs.(Expression), op: div})
+			outputQueue = append(outputQueue, &BinaryOperation{Rhs: rhs.(Expression), Lhs: lhs.(Expression), Op: Div})
 		}
 		operatorStack = operatorStack[:len(operatorStack)-1]
 	}
