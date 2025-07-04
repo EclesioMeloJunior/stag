@@ -61,8 +61,8 @@ func (rs *ReturnStatement) TokenLiteral() string {
 }
 
 type ExpressionStatement struct {
-	Token      	primitives.Token
-	Expression 	Expression
+	Token      primitives.Token
+	Expression Expression
 }
 
 func (es *ExpressionStatement) StatementNode()       {}
@@ -109,5 +109,52 @@ func (es *ExpressionStatement) String() string {
 }
 
 func (i *Identifier) String() string {
-	return  i.Value
+	return i.Value
+}
+
+type IntegerLiteral struct {
+	Token primitives.Token
+	Value int64
+}
+
+func (il *IntegerLiteral) ExpressionNode()      {}
+func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
+func (il *IntegerLiteral) String() string       { return il.Token.Literal }
+
+type PrefixExpression struct {
+	Token    primitives.Token
+	Operator string
+	Right    Expression
+}
+
+func (pe *PrefixExpression) ExpressionNode()      {}
+func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
+func (pe *PrefixExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(pe.Operator)
+	out.WriteString(pe.Right.String())
+	out.WriteString(")")
+
+	return out.String()
+}
+
+type InfixExpression struct {
+	Token    primitives.Token // The operator token, e.g. +
+	Left     Expression
+	Operator string
+	Right    Expression
+}
+
+func (oe *InfixExpression) ExpressionNode()      {}
+func (oe *InfixExpression) TokenLiteral() string { return oe.Token.Literal }
+func (oe *InfixExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(oe.Left.String())
+	out.WriteString(" " + oe.Operator + " ")
+	out.WriteString(oe.Right.String())
+	out.WriteString(")")
+	return out.String()
 }
